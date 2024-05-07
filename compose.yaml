@@ -25,6 +25,8 @@ services:
   clientemqtt:
     image: clientemqtt
     container_name: clientemqtt
+    build:
+      context: clienteMqtt
     environment:
       - TZ=America/Argentina/Buenos_Aires 
       - SERVIDOR=${SERVIDOR} #Se reemplazará por la env var SERVIDOR defineda en .env
@@ -61,7 +63,7 @@ services:
       GF_ANALYTICS_REPORTING_ENABLED: "false"
     restart: unless-stopped
   portainer:
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ce:2.20.2
     container_name: portainer
     ports:
       - 9443:9443
