@@ -60,6 +60,8 @@ services:
       - mariadb
     environment:
       GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_SERVER_ROOT_URL: https://${DOMINIO}:${PUERTO}/grafana
+      GF_SERVER_DOMAIN: https://${DOMINIO}:${PUERTO}/
     restart: unless-stopped
   portainer:
     image: portainer/portainer-ce:2.20.2
