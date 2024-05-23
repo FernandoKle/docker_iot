@@ -26,6 +26,7 @@ def main():
     application = Application.builder().token(token).build()
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CommandHandler('acercade', acercade))
+    application.add_handler(CommandHandler('about', acercade))
     application.run_polling()
 
 if __name__ == '__main__':
