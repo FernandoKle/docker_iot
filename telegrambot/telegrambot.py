@@ -31,11 +31,17 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ["modo auto", "modo manual"],
         ["rele ON", "rele OFF"]]
     await context.bot.send_message(update.message.chat.id, 
-        text="Bienvenido al Bot "+ nombre + " " + apellido,reply_markup=ReplyKeyboardMarkup(kb))
+        text="Bienvenido al Bot "+ nombre + " " + apellido
+        + "\n\nEscriba /help para ver una lista con los comandos",
+        reply_markup=ReplyKeyboardMarkup(kb))
 
 async def acercade(update: Update, context):
     await context.bot.send_message(update.message.chat.id, 
         text="Este bot fue creado por: \nFernando \nKleinubing")
+
+async def show_help(update: Update, context):
+    await context.bot.send_message(update.message.chat.id, 
+        text="Comandos: \n/setpoint \n/rele \n/periodo")
 
 async def kill(update: Update, context):
     logging.info(context.args)
@@ -186,7 +192,7 @@ async def set_rele(update: Update, context):
             modo = "ON"
         else:
             modo = "OFF"
-            
+
         await context.bot.send_message(update.message.chat.id, 
             text=f"Nuevo estado del rele: {modo}")
     else:
@@ -223,6 +229,7 @@ async def set_rele_msg(update: Update, context):
 def main():
     application = Application.builder().token(token).build()
     application.add_handler(CommandHandler('start', start))
+    application.add_handler(CommandHandler('help', show_help))
     application.add_handler(CommandHandler('acercade', acercade))
     application.add_handler(CommandHandler('about', acercade))
     application.add_handler(CommandHandler('kill', kill))
