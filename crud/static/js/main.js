@@ -10,3 +10,11 @@ if(btnDelete) {
     });
   })
 }
+
+const select = document.getElementById("selector_tema");
+const tema = document.getElementById("tema");
+//    document.getElementById("pagestyle").setAttribute("href", sheet);  
+
+select.addEventListener("change", (event) => {
+  result.textContent = `You like ${event.target.value}`;
+});
