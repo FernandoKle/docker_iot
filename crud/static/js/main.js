@@ -13,8 +13,12 @@ if(btnDelete) {
 
 const select = document.getElementById("selector_tema");
 const tema = document.getElementById("tema");
-//    document.getElementById("pagestyle").setAttribute("href", sheet);  
 
 select.addEventListener("change", (event) => {
-  result.textContent = `You like ${event.target.value}`;
+  if(event.target.value === "2"){
+    tema.setAttribute("href", "https://bootswatch.com/5/cosmo/bootstrap.min.css");  
+  }
+  else{
+    tema.setAttribute("href", "https://bootswatch.com/5/darkly/bootstrap.min.css");  
+  }
 });
