@@ -20,9 +20,13 @@
       {% if session.get("user_id") %}
       <div class="d-flex">
         <div class="nav-item pe-3 pt-2">
+          <a href="{{url_for('mqtt')}}" class="btn btn-secondary my-2 my-sm-0" type="submit">MQTT</a>
+        </div>
+        <div class="nav-item pe-3 pt-2">
           <select id="selector_tema" class="form-select" aria-label="Default select example">
-            <option selected value="1">Tema: Oscuro</option>
-            <option value="2">Tema: Claro</option>
+            <option selected value="0">Cambiar Tema</option>
+            <option value="1">Tema: Claro</option>
+            <option value="2">Tema: Oscuro</option>
           </select>
         </div>
         <div class="nav-item pe-3 pt-2">{{ session.get("user_id") }}</div>

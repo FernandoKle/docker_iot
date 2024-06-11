@@ -5,6 +5,13 @@ from functools import wraps
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
+import asyncio, ssl, certifi, json, aiomqtt
+
+tls_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+tls_context.verify_mode = ssl.CERT_REQUIRED
+tls_context.check_hostname = True
+tls_context.load_default_certs()
+
 logging.basicConfig(format='%(asctime)s - CRUD - %(levelname)s - %(message)s', level=logging.INFO)
 
 app = Flask(__name__)
@@ -102,6 +109,7 @@ def add_contact():
             flash('Se agregó un contacto')  # usa sesión
             logging.info("se agregó un contacto")
             mysql.connection.commit()
+
     return redirect(url_for('index'))
 
 @app.route('/borrar/<string:id>', methods = ['GET'])
@@ -145,3 +153,36 @@ def logout():
     session.clear()
     logging.info("el usuario {} cerró su sesión".format(session.get("user_id")))
     return redirect(url_for('index'))
+
+async def send_mqtt(topico, val):
+
+    async with aiomqtt.Client(
+        os.environ["SERVIDOR"],
+        username=os.environ["MQTT_USR"],
+        password=os.environ["MQTT_PASS"],
+        port=int(os.environ["PUERTO_MQTTS"]),
+        tls_context=tls_context,
+    ) as client:
+        await client.publish(topico, val, qos=1)
+
+
+@app.route('/mqtt', methods=['GET', 'POST'])
+@require_login
+def mqtt():
+    if request.method == 'GET':
+        return render_template('mqtt.html')
+
+    if request.method == 'POST':
+
+        disp = request.form['disp']
+        val = request.form['val']
+        cmd = request.form['cmd']
+        
+        topico = "iot/2024/" + disp + "/" + cmd
+        
+        asyncio.run( send_mqtt(topico, val) )
+
+        flash('Se envio el mensaje')
+        logging.info("MQTT send: " + topico + " => " + val)
+
+    return redirect(url_for('mqtt'))
