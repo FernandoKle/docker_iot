@@ -142,6 +142,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mariadb
+
   node-red:
     image: nodered/node-red:latest
     container_name: node-red
@@ -154,9 +155,11 @@ services:
       - SERVIDOR=${SERVIDOR}
       - INFLUX_SERVER=${INFLUX_SERVER}
       - INFLUX_TOKEN=${INFLUX_TOKEN}
+      - TB_TOKEN=${TB_TOKEN}
     volumes:
       - ./node-red:/data
     restart: unless-stopped
+
   influxdb:
     image: influxdb:latest
     container_name: influxdb
